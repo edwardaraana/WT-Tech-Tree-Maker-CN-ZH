@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<link rel="icon" href="https://warthunder.com/i/favicons/mstile-144x144.png" />
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>战争雷霆科技树制作器汉化版</title>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="style.css" title="WT_TECH_TREE_MAKER_STYLES" />
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MXHJ2WEKE"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-2MXHJ2WEKE');
+	</script>
+</head>
+
+<body>
+	<label id="techTreeNameLabel" for="techTreeName">
+		<h3>科技树名称:</h3>
+	</label>
+	<input type="text" id="techTreeName" name="techTreeName" />
+
+	<label id="techTreeMainDescLabel" for="techTreeMainDesc">
+		<h3>科技树描述:</h3>
+	</label>
+	<textarea id="techTreeMainDesc"
+		name="techTreeMainDesc">可以在这里写有关整个科技树的描述。</textarea>
+	<br /><br />
+	<nav>
+		<div id="navAdd">添加载具</div>
+		<div id="navEdit">编辑载具</div>
+		<div id="navDel">删除载具</div>
+		<div id="navOrder">载具排序</div>
+		<div id="navBackup">备份</div>
+		<div id="navExport">导出科技树</div>
+		<div id="navClone">克隆战雷维基</div>
+		<div id="navSettings">设置</div>
+		<div id="navHide">隐藏菜单</div>
+	</nav>
+
+	<div id="addModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>添加新载具</h2>
+			</div>
+			<div class="modal-body">
+				<form id="newForm">
+					<div id="nameInputDiv">
+						<label for="vehicleName">名称:</label>
+						<input type="text" name="vehicleName" id="vehicleName" maxlength="50" />
+						<div class="tooltip">
+							❓
+							<span class="tooltipText">载具名称<br /><br />必需项</span>
+						</div>
+						<br />
+					</div>
+					<div class="flexWrapper">
+						<span class="flexTitle">载具数据</span>
+						<div class="inputModalFlex">
+							<div class="inputModalFlexChild">
+								<label for="vehicleType">类型:</label>
+								<select name="vehicleType" id="vehicleType">
+									<option value="researchable">可研发</option>
+									<option value="reserve">初始</option>
+									<option value="premium">高级</option>
+									<option value="event">活动</option>
+									<option value="squadron">联队</option>
+								</select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具类型。不可研究的载具将自动放置在科技树的高级载具侧栏上</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleBr">分房权重:</label>
+								<input type="number" name="vehicleBr" id="vehicleBr" min="1" max="99" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具的分房权重。<br /><br />必须是少于100的正数，且有零或一位小数。
+										<br /><br />并非一定要像游戏里那样设置为.0、.3、.7，可以设为任意小数。
+										<br /><br />倘若为空，则默认为x.0。
+										<br /><br />有效的权重示意: <br />[3] [3.3] [15] [40.5]
+									</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleThumbnail">缩略图:</label>
+								<input type="text" name="vehicleThumbnail" id="vehicleThumbnail" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">显示在科技树界面中的小图。
+										<br /><br />可选项</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="flexWrapper">
+						<span class="flexTitle">在科技树中的位置</span>
+						<div class="inputModalFlex">
+							<div class="inputModalFlexChild">
+								<label for="vehicleRank">等级:</label>
+								<input type="number" name="vehicleRank" id="vehicleRank" min="1" max="99" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具等级，必须是1~99之间的整数。
+										<br /><br />必需项</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleBranch">分支:</label>
+								<input type="number" name="vehicleBranch" id="vehicleBranch" min="1" max="9" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">定义载具所属的分支（即从左到右的每列），必须是1~9之间的整数。
+										<br /><br />必需项</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleConnection">连接:</label>
+								<select name="vehicleConnection" id="vehicleConnection">
+									<option value="yes">是</option>
+									<option value="no">否</option>
+									<option value="folder">折叠</option>
+								</select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">定义每列载具同方位上方的连接关系。必须位于同一列。
+										折叠载具必须有位于其上方的其他载具。</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleFollow">研发前置:</label>
+								<select id="vehicleFollow" name="vehicleFollow"></select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">此选项允许您选择载具的研发前置（上一辆载具）以覆盖默认的权重排序。<br /><br />
+										为了使之起效，必须位于同一等级和分支。</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="float: left;padding: 15px;">
+						种类:
+						<div class="tooltip">
+							❓
+							<span class="tooltipText">载具上显示的种类图标。<br /><br />
+								默认没有。</span>
+						</div>
+					</div>
+					<div id="vehicleClassIcons"></div><br>
+					<label for="vehicleImageList">图片:</label>
+					<div class="tooltip">
+						❓
+						<span class="tooltipText">点击载具后显示的图片<br /><br />
+							可选项</span>
+					</div>
+					<br />
+					<button id="vehicleImageListAdd">添加图片 <b style="color: green">+</b></button>
+					<ol id="vehicleImageList"></ol>
+
+					<label for="vehicleDescription">描述:</label>
+					<div class="tooltip">
+						❓
+						<span class="tooltipText">载具的描述 <br /><br />
+							可选项 - 不也挺好吗 ;)</span>
+					</div>
+					<br />
+					<textarea name="vehicleDescription" id="vehicleDescription"
+						placeholder="This vehicle is awesome!"></textarea>
+				</form>
+				<button id="addButton">添加载具</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="editModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>编辑载具</h2>
+			</div>
+			<div class="modal-body">
+				<div id="editSelectDiv">
+					选择要编辑的载具:
+					<select id="editionSelect"></select>
+				</div>
+
+				<form id="editForm">
+					<div id="nameInputDiv">
+						<label for="vehicleNameEdit">名称:</label>
+						<input type="text" name="vehicleNameEdit" id="vehicleNameEdit" maxlength="50" />
+						<div class="tooltip">
+							❓
+							<span class="tooltipText">载具名称.<br /><br />必选项</span>
+						</div>
+					</div>
+					<div class="flexWrapper">
+						<span class="flexTitle">载具资料</span>
+						<div class="inputModalFlex">
+							<div class="inputModalFlexChild">
+								<label for="vehicleType">类型:</label>
+								<select name="vehicleType" id="vehicleTypeEdit">
+									<option value="researchable">可研发</option>
+									<option value="reserve">初始</option>
+									<option value="premium">高级</option>
+									<option value="event">活动</option>
+									<option value="squadron">联队</option>
+								</select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具类型。不可研究的载具将自动放置在科技树的高级载具侧栏上</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleBrEdit">分房权重:</label>
+								<input type="number" name="vehicleBrEdit" id="vehicleBrEdit" min="1" max="99" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具的分房权重。<br /><br />必须是少于100的正数，且有零或一位小数。
+										<br /><br />并非一定要像游戏里那样设置为.0、.3、.7，可以设为任意小数。
+										<br /><br />倘若为空，则默认为x.0。
+										<br /><br />有效的权重示意: <br />[3] [3.3] [15] [40.5]
+									</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleThumbnailEdit">缩略图:</label>
+								<input type="text" name="vehicleThumbnailEdit" id="vehicleThumbnailEdit" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">显示在科技树界面中的小图。
+										<br /><br />可选项</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="flexWrapper">
+						<span class="flexTitle">在科技树中的位置</span>
+						<div class="inputModalFlex">
+							<div class="inputModalFlexChild">
+								<label for="vehicleRankEdit">等级:</label>
+								<input type="number" name="vehicleRankEdit" id="vehicleRankEdit" min="1" max="99" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">载具等级，必须是1~99之间的整数。
+										<br /><br />必需项</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleBranchEdit">分支:</label>
+								<input type="number" name="vehicleBranchEdit" id="vehicleBranchEdit" min="1" max="9" />
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">定义载具所属的分支（即从左到右的每列），必须是1~9之间的整数。
+										<br /><br />必需项</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleConnectionEdit">连接</label>
+								<select name="vehicleConnectionEdit" id="vehicleConnectionEdit">
+									<option value="yes">是</option>
+									<option value="no">否</option>
+									<option value="folder">折叠</option>
+								</select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">定义每列载具同方位上方的连接关系。必须位于同一列。
+										折叠载具必须有位于其上方的其他载具。</span>
+								</div>
+							</div>
+							<div class="inputModalFlexChild">
+								<label for="vehicleFollowEdit">研发前置:</label>
+								<select id="vehicleFollowEdit" name="vehicleFollowEdit"></select>
+								<div class="tooltip">
+									❓
+									<span class="tooltipText">此选项允许您选择载具的研发前置（上一辆载具）以覆盖默认的权重排序。<br /><br />
+										为了使之起效，必须位于同一等级和分支。</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="float: left;padding: 15px;">
+						种类:
+						<div class="tooltip">
+							❓
+							<span class="tooltipText">载具上显示的种类图标。<br /><br />
+								默认没有。</span>
+						</div>
+					</div>
+					<div id="vehicleClassIconsEdit"></div><br>
+					<label for="vehicleImageListEdit">图片:</label>
+					<div class="tooltip">
+						❓
+						<span class="tooltipText">点击载具后显示的图片<br /><br />
+							可选项</span>
+					</div>
+					<br />
+					<button id="vehicleImageListEditAdd">添加图片 <b style="color: green">+</b></button>
+					<ol id="vehicleImageListEdit"></ol>
+					<br />
+
+					<label for="vehicleDescriptionEdit">描述:</label>
+					<div class="tooltip">
+						❓
+						<span class="tooltipText">载具的描述 <br /><br />
+							可选项 - 不也挺好吗 ;)</span>
+					</div>
+					<textarea name="vehicleDescriptionEdit" id="vehicleDescriptionEdit" rows="10" cols="50"
+						placeholder="This vehicle is awesome!"></textarea>
+				</form>
+				<button id="editButton">应用更改</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="delModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>删除载具</h2>
+			</div>
+			<div class="modal-body">
+				<button id="deleteAllButton">清空科技树</button>
+				<br /><br /><br />
+				<div id="deleteSelectDiv">
+					<select id="deleteVehicleSelect"></select>
+					<button id="deleteVehicleButton">删除载具e</button>
+				</div>
+				<div id="vehicleDeleteDisplay"></div>
+			</div>
+		</div>
+	</div>
+
+	<div id="orderModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>载具排序</h2>
+			</div>
+			<div class="modal-body">
+				<p>
+					这里可以删除覆盖了默认权重排序的自定义研发前置。
+					但若要添加新连接，请单独编辑载具。
+				</p>
+				<p id="followLoopWarning"><b>警告!</b> 有一圈载具形成了衔尾蛇!</p>
+				<p id="multipleFollowWarning"></p>
+				<table>
+					<tbody id="vehicleOrderList"></tbody>
+				</table>
+				<p>
+					有麻烦了吗？请阅读
+					<a href="https://github.com/przemyslaw-zan/WT-Tech-Tree-Maker#vehicle-ordering"
+						target="_blank">指南</a>!
+						<div class="tooltip">
+							❓
+							<span class="tooltipText">这是一个github链接。 <br /><br />
+								英文原版没有这个问号。</span>
+						</div>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div id="backupModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>下载&上传备份</h2>
+			</div>
+			<div class="modal-body">
+				<button id="backupDownload">下载科技树备份</button><br /><br />
+				可以在此处下载科技树的备份，往后可以加载回来继续编辑。用于：
+				<ul>
+					<li>防止因清理浏览器缓存而丢失内容。</li>
+					<li>将项目移至不同电脑。</li>
+					<li>多项目工作。</li>
+				</ul>
+				<br /><br />
+
+				上传科技树备份: <input id="backupUpload" type="file" accept=".json" /> <br /><br />
+				<button id="loadBackup">加载备份</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="exportModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>导出科技树</h2>
+			</div>
+			<div class="modal-body">
+				将科技树导出为可读的html文件:
+				<br />
+				<button id="exportTechTreeButton">导出</button>
+				<br />
+				<br />
+				<a href="https://neocities.org/" target="_blank">Neocities</a> 是一个你可以免费托管你所制作的科技树的好地方 ;)
+				<br />
+				<br />
+				如果你希望自己制作的科技树被收录在
+				<a href="https://zanju.neocities.org/" target="_blank">官方库</a>,
+				中，只需要在
+				<a href="https://www.reddit.com/user/zanju13" target="_blank">Reddit</a>
+				上给原作者(u/zanju13)发消息，他就会在里面添加你所创建科技树的链接。就算你的科技树仍在创作中，也可以发消息给他看看！
+				知道有人喜欢这个工具真的很能激励原作者去改进他 :)
+			</div>
+		</div>
+	</div>
+
+	<div id="cloneModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>克隆战雷维基</h2>
+			</div>
+			<div class="modal-body">
+				<h3>WIP</h3>
+				实验性功能。允许你从战争雷霆的官方维基克隆科技树。一些功能可能<b>暂时</b>还没法发挥其应有的功能。
+				<ul>
+					<li>不考虑连接。所有可研发载具都将连接，而高级载具则不会。</li>
+					<li>直升机科技树会很混乱——这在代码层面难以修复，但用户则很容易通过简单的编辑去修复。</li>
+				</ul>
+				<hr>
+				此功能允许您从战雷维基页面克隆科技树。每辆车辆将具有：
+				<ul>
+					<li>名称</li>
+					<li>分房权重</li>
+					<li>缩略图</li>
+					<li>正确的等级和分支定位</li>
+					<li>类型 (可研发 / 高级 / 联队 / 活动)</li>
+					<li>折叠载具 (如果是的话)</li>
+				</ul>
+				很遗憾，维基上的科技树界面没有载具种类，所以本工具将不会提供：
+				<ul>
+					<li>种类</li>
+				</ul>
+
+				<h3>步骤指南</h3>
+
+				<ol>
+					<li>点击此处 → <button id="copyCloneUtility">复制代码</button></li>
+					<li>访问您想要的科技树（例如：
+						<a href="https://wiki.warthunder.com/ground?v=t&t_c=germany" target="_blank">
+							德国陆军载具</a>）
+					</li>
+					<li>打开控制台的按键
+						<ul>
+							<li> 对于大多数浏览器： <b class="codeFont">F12</b>
+							</li>
+							<li> 对于Chrome： <b class="codeFont">ctrl + shift + c</b>
+							</li>
+							<li> 对于火狐： <b class="codeFont">ctrl + shift + i</b>
+							</li>
+						</ul>
+					</li>
+					<li>控制台通常用
+						<b class="codeFont">></b> 或
+						<b class="codeFont">>></b> 符号表示。
+						你可以在那里自由地输入并按
+						<b class="codeFont">enter</b>
+						执行命令 —— <i>别怕</i>, 无论你改了啥，只要刷新页面就能恢复了。
+					</li>
+					<li>把代码粘贴到控制台
+						<ul>
+							<li>按 <b class="codeFont">ctrl + v</b> <i>键或</i></li>
+							<li><b class="codeFont">鼠标右键→粘贴</b></li>
+						</ul>
+					</li>
+					<li>按 <b class="codeFont">enter</b> 键以运行代码</li>
+					<li>这应在你的电脑上下载一个可以将其上传到科技树制作器的备份文件
+					</li>
+				</ol>
+
+			</div>
+		</div>
+	</div>
+
+	<div id="settingsModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>设置</h2>
+			</div>
+			<div class="modal-body">
+				<label>
+					截屏模式
+					<input type="checkbox" name="screenshotMode" autocomplete="off">
+				</label>
+
+				<p>缩略图样式:</p>
+				<label>
+					名字下方
+					<input type="radio" name="thumbnailStyle" value="0" autocomplete="off" checked>
+				</label>
+				<label>
+					自适应至方格
+					<input type="radio" name="thumbnailStyle" value="1" autocomplete="off">
+				</label>
+				<label>
+					拉伸至全方格
+					<input type="radio" name="thumbnailStyle" value="2" autocomplete="off">
+				</label>
+
+				<p>载具方格布局:</p>
+				<label>
+					默认
+					<input type="radio" name="badgeStyle" value="0" autocomplete="off" checked>
+				</label>
+				<label>
+					游戏
+					<input type="radio" name="badgeStyle" value="1" autocomplete="off">
+				</label>
+			</div>
+		</div>
+	</div>
+
+	<span id="techTreeHint">提示：您可以插入 <b class="codeFont">///</b> 以换行。</span>
+
+	<div id="techTreeWrapper">
+		<div id="techTree"></div>
+	</div>
+
+	<footer>
+		<div>
+			<a href="https://github.com/przemyslaw-zan/WT-Tech-Tree-Maker" target="_blank">
+				<b>Github</b>
+				<img src="./images/github.png">
+			</a>
+			<i>看源码</i>
+		</div>
+		<div>
+			<a href="https://www.reddit.com/user/zanju13" target="_blank">
+				<b>原作者主页</b>
+				<img src="./images/reddit.png">
+			</a>
+			<i>联系开发者</i>
+		</div>
+		<div>
+			<a href="https://zanju.neocities.org/" target="_blank">
+				<b>范例</b>
+				<img src="./images/ribbon.png">
+				<!-- https://icons-for-free.com/ribbon+icon-1320087269980093187/ -->
+			</a>
+			<i>视奸别人的</i>
+		</div>
+		<div>
+			<a href="https://zh.moegirl.org.cn/User:Edwarda" target="_blank">
+				<b>汉化者主页</b>
+				<img src="./images/favicon.ico">
+				<!-- https://img.moegirl.org.cn/favicon.ico -->
+			</a>
+			<i>鸫鸫。</i>
+		</div>
+	</footer>
+
+	<div id="vehicleDisplayModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2 id="modal_title"></h2>
+			</div>
+			<div class="modal-gallery">
+				<div class="galleria" id="galleria"></div>
+			</div>
+			<div class="modal-body" id="modalDesc"></div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+	<script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script src="template.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
