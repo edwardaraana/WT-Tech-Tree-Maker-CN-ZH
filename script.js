@@ -1183,7 +1183,7 @@ function createVehicleBadge ( vehicle ) {
 		svg = createSvg( classIcons.find( classIcon => classIcon.id === vehicle.classIcon ) );
 	}
 	let brLabel = '';
-	if ( vehicle.type === 'reserve' ) brLabel = `<i>Reserve</i> (${ vehicle.br.toFixed( 1 ) })`;
+	if ( vehicle.type === 'reserve' ) brLabel = `<i>初始</i> (${ vehicle.br.toFixed( 1 ) })`;
 	else brLabel = vehicle.br.toFixed( 1 );
 	let branchLine = '';
 	if ( [ 'researchable', 'reserve' ].includes( vehicle.type ) ) branchLine = `badgeLine_${ vehicle.branch }`;
